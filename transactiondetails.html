@@ -1,0 +1,144 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Details</title>
+</head>
+<body>
+    <div style="background-color: #333; padding: 10px;">
+        <a href="customers.html" style="color: white; text-decoration: none; margin-right: 10px;">Customers</a>
+        <a href="products.html" style="color: white; text-decoration: none; margin-right: 10px;">Products</a>
+        <a href="transactions.html" style="color: white; text-decoration: none; margin-right: 10px;">Transactions</a>
+        <a href="transactiondetails.html" style="color: white; text-decoration: none; margin-right: 10px;">Transaction Details</a>
+        <a href="inventorytrackers.html" style="color: white; text-decoration: none;margin-right: 10px;">Inventory Trackers</a>
+        <a href="index.html" style="color: white; text-decoration: none;">Index</a>
+    </div>
+
+
+    <h1>Transaction Details</h1>
+
+    <!-- Transaction Details Table -->
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Transaction ID</th>
+                <th>Product ID</th>
+                <th>Transaction Type</th>
+                <th>Quantity</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="transactionDetailsTableBody">
+        </tbody>
+    </table>
+
+    <!-- Add Transaction Details Form -->
+    <div style="margin-top: 20px;">
+    <form id="addTransactionDetailsForm">
+        <label for="transactionID">Transaction ID:</label>
+        <input type="number" id="transactionID" required>
+        <label for="productID">Product ID:</label>
+        <input type="number" id="productID" required>
+        <label for="transactionType">Transaction Type:</label>
+        <input type="text" id="transactionType" required>
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" required>
+        <button type="submit" onclick="addTransactionDetails()">Add Transaction Details</button>
+    </form>
+    </div>
+
+    <!-- Update/Delete forms -->
+    <form id="updateTransactionDetailsForm" style="display: none;">
+        <h2>Update Transaction Details</h2>
+        <label for="updateTransactionID">Transaction ID:</label>
+        <input type="number" id="updateTransactionID" required>
+        <label for="updateProductID">Product ID:</label>
+        <input type="number" id="updateProductID" required>
+        <label for="updateTransactionType">Transaction Type:</label>
+        <input type="text" id="updateTransactionType" required>
+        <label for="updateQuantity">Quantity:</label>
+        <input type="number" id="updateQuantity" required>
+        <button type="submit" onclick="updateTransactionDetails()">Update Transaction Details</button>
+        <button type="button" onclick="cancelUpdate()">Cancel</button>
+    </form>
+
+    <form id="deleteTransactionDetailsForm" style="display: none;">
+        <h2>Delete Transaction Details</h2>
+        <p>Are you sure you want to delete this transaction detail?</p>
+        <button type="submit" onclick="deleteTransactionDetails()">Delete Transaction Details</button>
+        <button type="button" onclick="cancelDelete()">Cancel</button>
+    </form>
+
+    <script>
+        const transactionDetails = [
+            { id: 1, transactionID: 1, productID: 2, transactionType: 'Sold', quantity: 1 },
+            { id: 2, transactionID: 2, productID: 3, transactionType: 'Rent', quantity: 1 },
+            { id: 3, transactionID: 3, productID: 1, transactionType: 'Sold', quantity: 1 },
+            { id: 4, transactionID: 3, productID: 2, transactionType: 'Sold', quantity: 2 }
+        ];
+
+        // Function to populate the table with data
+        function populateTable() {
+            const tableBody = document.getElementById('transactionDetailsTableBody');
+            tableBody.innerHTML = '';
+
+            transactionDetails.forEach(transactionDetail => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${transactionDetail.id}</td>
+                    <td>${transactionDetail.transactionID}</td>
+                    <td>${transactionDetail.productID}</td>
+                    <td>${transactionDetail.transactionType}</td>
+                    <td>${transactionDetail.quantity}</td>
+                    <td>
+                        <button onclick="editTransactionDetails(${transactionDetail.id})">Edit</button>
+                        <button onclick="confirmDelete(${transactionDetail.id})">Delete</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Function to edit transaction details
+        function editTransactionDetails(transactionDetailsId) {
+            const transactionDetail = transactionDetails.find(td => td.id === transactionDetailsId);
+            if (transactionDetail) {
+                document.getElementById('updateTransactionDetailsForm').style.display = 'block';
+                document.getElementById('updateTransactionID').value = transactionDetail.transactionID;
+                document.getElementById('updateProductID').value = transactionDetail.productID;
+                document.getElementById('updateTransactionType').value = transactionDetail.transactionType;
+                document.getElementById('updateQuantity').value = transactionDetail.quantity;
+            }
+        }
+
+        // Function to cancel the update operation
+        function cancelUpdate() {
+            document.getElementById('updateTransactionDetailsForm').style.display = 'none';
+            document.getElementById('updateTransactionID').value = '';
+            document.getElementById('updateProductID').value = '';
+            document.getElementById('updateTransactionType').value = '';
+            document.getElementById('updateQuantity').value = '';
+        }
+
+        // Function to confirm the deletion of transaction details
+        function confirmDelete(transactionDetailsId) {
+            const transactionDetail = transactionDetails.find(td => td.id === transactionDetailsId);
+            if (transactionDetail) {
+                document.getElementById('deleteTransactionDetailsForm').style.display = 'block';
+            }
+        }
+
+        // Function to cancel the delete operation
+        function cancelDelete() {
+            document.getElementById('deleteTransactionDetailsForm').style.display = 'none';
+        }
+
+        // Initial population of the table
+        populateTable();
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customers</title>
+
+    <div style="background-color: #333; padding: 10px;">
+        <a href="customers.html" style="color: white; text-decoration: none; margin-right: 10px;">Customers</a>
+        <a href="products.html" style="color: white; text-decoration: none; margin-right: 10px;">Products</a>
+        <a href="transactions.html" style="color: white; text-decoration: none; margin-right: 10px;">Transactions</a>
+        <a href="transactiondetails.html" style="color: white; text-decoration: none; margin-right: 10px;">Transaction Details</a>
+        <a href="inventorytrackers.html" style="color: white; text-decoration: none; margin-right: 10px;">Inventory Trackers</a>
+        <a href="index.html" style="color: white; text-decoration: none;">Index</a>
+    </div>
+</head>
+<body>
+    <h1>Customers</h1>
+
+    <!-- Customer Table -->
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="customerTableBody">
+        </tbody>
+    </table>
+
+    <!-- Add Customer Form -->
+    <div style="margin-top: 20px;"> 
+        <form id="addCustomerForm">
+            <label for="customerName">Name:</label>
+            <input type="text" id="customerName" required>
+            <label for="customerEmail">Email:</label>
+            <input type="email" id="customerEmail" required>
+            <button type="submit" onclick="addCustomer()">Add Customer</button>
+        </form>
+    </div>
+
+    <!-- Update/Delete forms -->
+    <form id="updateCustomerForm" style="display: none;">
+        <h2>Update Customer</h2>
+        <label for="updateCustomerName">Name:</label>
+        <input type="text" id="updateCustomerName" required>
+        <label for="updateCustomerEmail">Email:</label>
+        <input type="email" id="updateCustomerEmail" required>
+        <button type="submit" onclick="updateCustomer()">Update Customer</button>
+        <button type="button" onclick="cancelUpdate()">Cancel</button>
+    </form>
+
+    <form id="deleteCustomerForm" style="display: none;">
+        <h2>Delete Customer</h2>
+        <p>Are you sure you want to delete this customer?</p>
+        <button type="submit" onclick="deleteCustomer()">Delete Customer</button>
+        <button type="button" onclick="cancelDelete()">Cancel</button>
+    </form>
+
+    <script>
+        const customers = [
+            { id: 1, name: 'John Doe', email: 'johndoe@123.org' },
+            { id: 2, name: 'Jane Doe', email: 'janedoe@123.org' },
+            { id: 3, name: 'David Davis', email: 'dd45@123.org' }
+        ];
+
+
+        // Function to populate the table with data
+        function populateTable() {
+            const tableBody = document.getElementById('customerTableBody');
+            tableBody.innerHTML = '';
+
+            customers.forEach(customer => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${customer.id}</td>
+                    <td>${customer.name}</td>
+                    <td>${customer.email}</td>
+                    <td>
+                        <button onclick="editCustomer(${customer.id})">Edit</button>
+                        <button onclick="confirmDelete(${customer.id})">Delete</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Function to edit a customer
+        function editCustomer(customerId) {
+            const customer = customers.find(c => c.id === customerId);
+            if (customer) {
+                document.getElementById('updateCustomerForm').style.display = 'block';
+                document.getElementById('updateCustomerName').value = customer.name;
+                document.getElementById('updateCustomerEmail').value = customer.email;
+            }
+        }
+
+        // Function to cancel the update operation
+        function cancelUpdate() {
+            document.getElementById('updateCustomerForm').style.display = 'none';
+            document.getElementById('updateCustomerName').value = '';
+            document.getElementById('updateCustomerEmail').value = '';
+        }
+
+        // Function to confirm the deletion of a customer
+        function confirmDelete(customerId) {
+            const customer = customers.find(c => c.id === customerId);
+            if (customer) {
+                document.getElementById('deleteCustomerForm').style.display = 'block';
+            }
+        }
+
+        // Function to cancel the delete operation
+        function cancelDelete() {
+            document.getElementById('deleteCustomerForm').style.display = 'none';
+        }
+
+
+        // Initial population of the table
+        populateTable();
+    </script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Trackers</title>
+</head>
+<body>
+    <div style="background-color: #333; padding: 10px;">
+        <a href="customers.html" style="color: white; text-decoration: none; margin-right: 10px;">Customers</a>
+        <a href="products.html" style="color: white; text-decoration: none; margin-right: 10px;">Products</a>
+        <a href="transactions.html" style="color: white; text-decoration: none; margin-right: 10px;">Transactions</a>
+        <a href="transactiondetails.html" style="color: white; text-decoration: none; margin-right: 10px;">Transaction Details</a>
+        <a href="inventorytrackers.html" style="color: white; text-decoration: none; margin-right: 10px;">Inventory Trackers</a>
+        <a href="index.html" style="color: white; text-decoration: none;">Index</a>
+    </div>
+
+    <h1>Inventory Trackers</h1>
+
+    <!-- Inventory Trackers Table -->
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Product ID</th>
+                <th>Operation Type</th>
+                <th>Quantity</th>
+                <th>Date Created</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="inventoryTrackersTableBody">
+        </tbody>
+    </table>
+
+    <!-- Add Inventory Tracker Form -->
+    <div style="margin-top: 20px;">
+        <form id="addInventoryTrackerForm">
+            <label for="productID">Product ID:</label>
+            <input type="number" id="productID" required>
+            <label for="operationType">Operation Type:</label>
+            <input type="text" id="operationType" required>
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" required>
+            <label for="dateCreated">Date Created:</label>
+            <input type="date" id="dateCreated" required>
+            <button type="submit" onclick="addInventoryTracker()">Add Inventory Tracker</button>
+        </form>
+        </div>
+
+    <!-- Update/Delete forms -->
+    <form id="updateInventoryTrackerForm" style="display: none;">
+        <h2>Update Inventory Tracker</h2>
+        <label for="updateProductID">Product ID:</label>
+        <input type="number" id="updateProductID" required>
+        <label for="updateOperationType">Operation Type:</label>
+        <input type="text" id="updateOperationType" required>
+        <label for="updateQuantity">Quantity:</label>
+        <input type="number" id="updateQuantity" required>
+        <label for="updateDateCreated">Date Created:</label>
+        <input type="datetime-local" id="updateDateCreated" required>
+        <button type="submit" onclick="updateInventoryTracker()">Update Inventory Tracker</button>
+        <button type="button" onclick="cancelUpdate()">Cancel</button>
+    </form>
+
+    <form id="deleteInventoryTrackerForm" style="display: none;">
+        <h2>Delete Inventory Tracker</h2>
+        <p>Are you sure you want to delete this inventory tracker?</p>
+        <button type="submit" onclick="deleteInventoryTracker()">Delete Inventory Tracker</button>
+        <button type="button" onclick="cancelDelete()">Cancel</button>
+    </form>
+
+    <script>
+        const inventoryTrackers = [
+            { id: 1, productID: 1, operationType: 'Subtracted', quantity: 1, dateCreated: '2023-07-16T10:15:00' },
+            { id: 2, productID: 2, operationType: 'Subtracted', quantity: 3, dateCreated: '2023-07-14T08:00:00' },
+            { id: 3, productID: 3, operationType: 'Added', quantity: 1, dateCreated: '2023-07-15T09:30:00' }
+        ];
+
+        // Function to populate the table with data
+        function populateTable() {
+            const tableBody = document.getElementById('inventoryTrackersTableBody');
+            tableBody.innerHTML = '';
+
+            inventoryTrackers.forEach(inventoryTracker => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${inventoryTracker.id}</td>
+                    <td>${inventoryTracker.productID}</td>
+                    <td>${inventoryTracker.operationType}</td>
+                    <td>${inventoryTracker.quantity}</td>
+                    <td>${inventoryTracker.dateCreated}</td>
+                    <td>
+                        <button onclick="editInventoryTracker(${inventoryTracker.id})">Edit</button>
+                        <button onclick="confirmDelete(${inventoryTracker.id})">Delete</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Function to edit inventory tracker
+        function editInventoryTracker(inventoryTrackerId) {
+            const inventoryTracker = inventoryTrackers.find(it => it.id === inventoryTrackerId);
+            if (inventoryTracker) {
+                document.getElementById('updateInventoryTrackerForm').style.display = 'block';
+                document.getElementById('updateProductID').value = inventoryTracker.productID;
+                document.getElementById('updateOperationType').value = inventoryTracker.operationType;
+                document.getElementById('updateQuantity').value = inventoryTracker.quantity;
+                document.getElementById('updateDateCreated').value = inventoryTracker.dateCreated;
+            }
+        }
+
+        // Function to cancel the update operation
+        function cancelUpdate() {
+            document.getElementById('updateInventoryTrackerForm').style.display = 'none';
+            document.getElementById('updateProductID').value = '';
+            document.getElementById('updateOperationType').value = '';
+            document.getElementById('updateQuantity').value = '';
+            document.getElementById('updateDateCreated').value = '';
+        }
+
+        // Function to confirm the deletion of inventory tracker
+        function confirmDelete(inventoryTrackerId) {
+            const inventoryTracker = inventoryTrackers.find(it => it.id === inventoryTrackerId);
+            if (inventoryTracker) {
+                document.getElementById('deleteInventoryTrackerForm').style.display = 'block';
+            }
+        }
+
+        // Function to cancel the delete operation
+        function cancelDelete() {
+            document.getElementById('deleteInventoryTrackerForm').style.display = 'none';
+        }
+
+        // Initial population of the table
+        populateTable();
+    </script>
+</body>
+</html>
+
